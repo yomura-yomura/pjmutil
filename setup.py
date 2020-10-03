@@ -24,7 +24,7 @@ if not config_path.exists():
 
 setup(
     name='pjmutil',
-    version='1.0',
+    version='1.0.1',
     description='',
     author='yomura',
     author_email='yomura@hoge.jp',
@@ -33,7 +33,7 @@ setup(
     entry_points={
         'console_scripts': [
             "run_batch_job = pjmutil.scripts.run_batch_job:main",
-            "tail_log_of_batch_job = pjmutil.scripts.tail_log_of_batch_job"
+            "tail_log_of_batch_job = pjmutil.scripts.tail_log_of_batch_job:main"
         ],
     },
     package_data={"pjmutil": ["template-batch-job.txt"]},
