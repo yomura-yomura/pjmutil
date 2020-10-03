@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#----- pjsub options -----#
+#PJM -L "rscunit=unit1"
+#PJM -L "rscgrp={resource_group}"
+#PJM -L "vnode=1"
+#PJM -L "vnode-core=1"
+#PJM -o {log_path}/pjm.out
+#PJM -e {log_path}/pjm.err
+#----- pjsub options -----#
+
+source {bash_profile_path}
+
+python -u -c "
+from pjmutil.util import batch_job
+batch_job('$PJM_JOBID', '{all_inputs_path}', '{process_name}', '{resource_group}')
+"
