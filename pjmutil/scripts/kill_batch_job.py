@@ -12,7 +12,7 @@ def main():
 
     kill_names = [name for pn in args.process_names for name in all_names if re.fullmatch(pn, name)]
     if len(kill_names) == 0:
-        raise ValueError(f"No matched process names with {all_names}")
+        raise ValueError(f"No process names matched with {all_names}")
 
     print("")
     print("\n".join(kill_names))

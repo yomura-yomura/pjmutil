@@ -8,10 +8,9 @@ from pjmutil.config import base_log_path, get_data_file_path, resource_groups, b
 import shutil
 
 template_batch_job_script = open(pathlib.Path(__file__).parent/"template-batch-job.txt").read()
-rg_dict = {rg.lower(): rg for rg in resource_groups}
-
 
 def main():
+    rg_dict = {rg.lower(): rg for rg in resource_groups}
     parser = argparse.ArgumentParser(description='run process')
     parser.add_argument("all_inputs_path", type=pathlib.Path)
     parser.add_argument("resource_group", type=str.lower, choices=list(rg_dict.keys()))
@@ -22,7 +21,7 @@ def main():
     all_inputs_path = args.all_inputs_path.resolve()
     print(f"{all_inputs_path = }")
 
-    return run_batch_job(all_inputs_path, args.resource_group, output=args.output, force=args.force)
+    return run_batch_job(all_inputs_path, rg_dict[args.resource_group], output=args.output, force=args.force)
 
 
 def run_batch_job(all_inputs_path, resource_group, output=None, force=False, seeds=None):
@@ -53,7 +52,7 @@ def run_batch_job(all_inputs_path, resource_group, output=None, force=False, see
             seeds = seeds.tolist()
 
     script = template_batch_job_script.format(
-        resource_group=rg_dict[resource_group],
+        resource_group=resource_group,
         log_path=log_path,
         bash_profile_path=bash_profile_path,
         all_inputs_path=all_inputs_path,
