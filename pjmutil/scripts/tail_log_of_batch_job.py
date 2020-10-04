@@ -27,12 +27,13 @@ def main():
     log_files = sorted(log_dir.glob("*"), reverse=True)
     if len(log_files) == 0:
         print(colorama.Fore.RED + f"No log files under {log_dir}")
-        sys.exit(1)
+        return 1
     for log_file in log_files:
         print(colorama.Fore.CYAN + "* {}:".format(log_file.relative_to(pjmutil.config.base_log_path)))
         subprocess.run(["tail", "-n", str(args.lines), str(log_file)])
         print("")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

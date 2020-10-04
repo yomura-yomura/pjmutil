@@ -100,3 +100,14 @@ def get_all_job_id():
 def get_all_job_names():
     stdout = subprocess.run(["pjstat", "--choose", "jnam", "-s"], capture_output=True).stdout.decode()
     return [m[1] for m in re.finditer(r"^ JOB NAME .* : (.*)$", stdout, re.MULTILINE)]
+
+
+def kill_batch_job(id=None, name=None):
+    if id is not None:
+        pass
+    elif name is not None:
+        id = get_all_job_id()[get_all_job_names().index(name)]
+    else:
+        raise ValueError
+    p = subprocess.run(["pjdel", str(id)])
+    return p.returncode
