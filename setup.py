@@ -24,7 +24,7 @@ if not config_path.exists():
 
 setup(
     name='pjmutil',
-    version='1.1',
+    version='1.1.1',
     description='',
     author='yomura',
     author_email='yomura@hoge.jp',
@@ -36,7 +36,7 @@ setup(
             "tail_log_of_batch_job = pjmutil.scripts.tail_log_of_batch_job:main"
         ],
     },
-    package_data={"pjmutil": ["template-batch-job.txt"]},
+    package_data={"pjmutil": ["scripts/template-batch-job.txt"]},
     include_package_data=True,
     install_requires=[
         "pycrskrun @ git+https://github.com/yomura-yomura/pycrskrun",
