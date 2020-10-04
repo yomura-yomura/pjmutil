@@ -9,7 +9,8 @@ import time
 from .config import *
 
 
-def batch_job(pjm_jobid, all_inputs_process, process_name, resource_group):
+def batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
+              seeds=None):
     log_path = base_log_path / process_name
     all_inputs_path = pathlib.Path(all_inputs_process)
     run_dir = pathlib.Path(f"/tmp/job{pjm_jobid}/")
@@ -30,6 +31,14 @@ def batch_job(pjm_jobid, all_inputs_process, process_name, resource_group):
 
     ai = pycrskrun.all_input.all_input(all_inputs_path)
     ai.change_args("TELFIL", run_data_file)
+
+    if seeds is not None:
+        # assert np.ndim(seeds) == 2
+        # assert np.shape(seeds)[-1] == 3
+        for seed, args in zip(seeds, ai["SEED"]["args"]):
+            for i, s in enumerate(seed):
+                if s is not None:
+                    args[i] = s
 
     def run():
         subprocess.Popen(
