@@ -24,7 +24,7 @@ def main():
         name = args.pjm_jobid
 
     log_dir = pjmutil.config.base_log_path / name
-    log_files = reversed(list(log_dir.glob("*.out"))) + reversed(list(log_dir.glob("*.err")))
+    log_files = list(reversed(list(log_dir.glob("*.out")))) + list(reversed(list(log_dir.glob("*.err"))))
     if len(log_files) == 0:
         print(colorama.Fore.RED + f"No log files under {log_dir}")
         sys.exit(1)
