@@ -4,6 +4,8 @@ import subprocess
 import re
 import shutil
 import datetime as dt
+import threading
+import time
 from .config import *
 
 
@@ -35,7 +37,6 @@ def batch_job(pjm_jobid, all_inputs_process, process_name, resource_group):
             stdout=(log_path / "mc.out").open("w"), stderr=(log_path / "mc.err").open("w")
         ).communicate(str(ai).encode())
 
-    import threading, time
     thread = threading.Thread(target=run)
     thread.start()
 

@@ -24,7 +24,7 @@ if not config_path.exists():
 
 setup(
     name='pjmutil',
-    version='1.0.1',
+    version='1.0.3',
     description='',
     author='yomura',
     author_email='yomura@hoge.jp',
@@ -39,6 +39,7 @@ setup(
     package_data={"pjmutil": ["template-batch-job.txt"]},
     include_package_data=True,
     install_requires=[
-        "pycrskrun @ git+https://github.com/yomura-yomura/pycrskrun"
+        "pycrskrun @ git+https://github.com/yomura-yomura/pycrskrun",
+        "colorama"
     ]
 )

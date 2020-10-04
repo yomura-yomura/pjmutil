@@ -3,6 +3,8 @@ import pjmutil.config
 import pjmutil.util
 import argparse
 import subprocess
+import sys
+import colorama
 
 
 def main():
@@ -13,6 +15,8 @@ def main():
     parser.add_argument("-n", "--lines", type=int, default=10)
     args = parser.parse_args()
 
+    colorama.init(autoreset=True)
+
     try:
         i = all_id.index(args.pjm_jobid)
         name = all_names[i]
@@ -20,8 +24,12 @@ def main():
         name = args.pjm_jobid
 
     log_dir = pjmutil.config.base_log_path / name
-    for log_file in reversed(list(log_dir.glob("*"))):
-        print("* {}:".format(log_file.relative_to(pjmutil.config.base_log_path)))
+    log_files = reversed(list(log_dir.glob("*.out"))) + reversed(list(log_dir.glob("*.err")))
+    if len(log_files) == 0:
+        print(colorama.Fore.RED + f"No log files under {log_dir}")
+        sys.exit(1)
+    for log_file in log_files:
+        print(colorama.Fore.CYAN + "* {}:".format(log_file.relative_to(pjmutil.config.base_log_path)))
         subprocess.run(["tail", "-n", str(args.lines), str(log_file)])
         print("")
 
