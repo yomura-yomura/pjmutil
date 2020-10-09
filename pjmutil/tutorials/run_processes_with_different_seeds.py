@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import pathlib
 import pjmutil
-from pjmutil.scripts.run_batch_job import run_batch_job
+from pjmutil.scripts.pjm_run import run_batch_job
 import colorama
 
 

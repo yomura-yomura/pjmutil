@@ -9,6 +9,7 @@ import shutil
 
 template_batch_job_script = open(pathlib.Path(__file__).parent/"template-batch-job.txt").read()
 
+
 def main():
     rg_dict = {rg.lower(): rg for rg in resource_groups}
     parser = argparse.ArgumentParser(description='run process')
