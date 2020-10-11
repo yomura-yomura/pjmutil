@@ -91,7 +91,7 @@ def salvage_data():
 
     for name, jobid in job_dict.items():
         run_dir = get_run_dir(jobid)
-        print(f"* Checking {name:>{maxlen_name}} ({run_dir}:<20): ", end="")
+        print(f"* Checking {name:>{maxlen_name}} ({run_dir:<20}): ", end="")
 
         if not run_dir.exists():
             print("Not Found")
@@ -101,8 +101,8 @@ def salvage_data():
 
         target_dir = salvaged_data_dir / name
 
-        print(f"\t** Move {run_dir} to {target_dir}")
-        shutil.move(str(run_dir), str(target_dir))
+        print(f"\t** Copy {run_dir} to {target_dir}")
+        shutil.copytree(str(run_dir), str(target_dir))
     print("All processes have been done.")
 
 

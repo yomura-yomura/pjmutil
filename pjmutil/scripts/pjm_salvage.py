@@ -23,7 +23,7 @@ def main():
     tmp_log_dir = pathlib.Path.home()
 
     script = template_salvage_data.format(
-        resource_group="A",
+        resource_group="C",
         bash_profile_path=pjmutil.config.bash_profile_path,
         log_path=tmp_log_dir
     )
