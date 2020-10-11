@@ -87,9 +87,12 @@ def salvage_data():
 
     salvaged_data_dir = get_salvage_data_path()
 
+    maxlen_name = max(len(n) for n in job_dict.keys())
+
     for name, jobid in job_dict.items():
-        print(f"* Checking {name}: ", end="")
         run_dir = get_run_dir(jobid)
+        print(f"* Checking {name:>{maxlen_name}} ({run_dir}:<20): ", end="")
+
         if not run_dir.exists():
             print("Not Found")
             continue
