@@ -79,7 +79,7 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
 
 
 def get_salvage_data_path():
-    return base_data_path / "salvaged"
+    return base_data_path / "_salvaged"
 
 
 def salvage_data():

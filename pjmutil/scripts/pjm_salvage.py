@@ -20,8 +20,7 @@ def main():
         raise FileExistsError(salvage_data_path)
     salvage_data_path.mkdir()
 
-    tmp_log_dir = pathlib.Path("/tmp/pjmutil")
-    tmp_log_dir.mkdir()
+    tmp_log_dir = pathlib.Path.home()
 
     script = template_salvage_data.format(
         resource_group="A",
