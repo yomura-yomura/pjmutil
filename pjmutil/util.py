@@ -70,7 +70,7 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
             print(f"* Process will be stopped due to the time limit ({left} left; at {dt.datetime.now()})")
             break
         print(f"[DEBUG] {dt.timedelta(seconds=elapsed_time)} left.")
-        time.sleep(600)
+        time.sleep(60)
 
     print(f"* Move {run_data_file} to {base_data_path}")
     shutil.move(str(run_data_file), str(base_data_path/run_data_file.name))

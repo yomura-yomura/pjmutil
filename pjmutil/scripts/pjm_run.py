@@ -12,6 +12,7 @@ template_run_batch_job_script = open(pathlib.Path(__file__).parent / "template-r
 
 def main():
     rg_dict = {rg.lower(): rg for rg in resource_groups}
+
     parser = argparse.ArgumentParser(description='run process')
     parser.add_argument("all_inputs_path", type=pathlib.Path)
     parser.add_argument("resource_group", type=str.lower, choices=list(rg_dict.keys()))

@@ -11,9 +11,12 @@ template_salvage_data = open(pathlib.Path(__file__).parent / "template-salvage-d
 
 
 def main():
+    rg_dict = {rg.lower(): rg for rg in pjmutil.config.resource_groups}
+
     parser = argparse.ArgumentParser(description='Salvage data')
-    # args = parser.parse_args()
-    parser.parse_args()
+    parser.add_argument("-r", "--resource-group", type=str.lower, choices=list(rg_dict.keys()),
+                        default=next(iter(rg_dict.keys())))
+    args = parser.parse_args()
 
     salvage_data_path = pjmutil.util.get_salvage_data_path()
     if salvage_data_path.exists():
@@ -21,9 +24,12 @@ def main():
     salvage_data_path.mkdir()
 
     tmp_log_dir = pathlib.Path.home()
+    output_file = tmp_log_dir / "pjm.out"
+    if output_file.exists():
+        raise FileExistsError(output_file)
 
     script = template_salvage_data.format(
-        resource_group="C",
+        resource_group=rg_dict[args.resource_group],
         bash_profile_path=pjmutil.config.bash_profile_path,
         log_path=tmp_log_dir
     )
@@ -34,7 +40,7 @@ def main():
         raise RuntimeError(f"{p.returncode = }")
 
     import time
-    output_file = tmp_log_dir / "pjm.out"
+
 
     while True:
         time.sleep(1)
