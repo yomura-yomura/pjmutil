@@ -67,7 +67,7 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
     if use_tmp_dir_on_node:
         limit = time_limits[resource_group] - 10 * 60
     else:
-        limit = time_limits[pjm_jobid] - 1 * 60
+        limit = time_limits[resource_group] - 1 * 60
 
     t0 = time.time()
 
