@@ -56,7 +56,7 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
     print("* Start CORSIKA")
     # 3 minutes before
     # limit = get_limit_elapsed_time(pjm_jobid) - 3 * 60
-    limit = time_limits[resource_group] - 3 * 60
+    limit = time_limits[resource_group] - 10 * 60
     t0 = time.time()
 
     while True:
@@ -67,15 +67,16 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
             break
         elif limit <= elapsed_time:
             left = dt.timedelta(seconds=elapsed_time)
-            print(f"* Process will be stopped due to the time limit ({left} left)")
+            print(f"* Process will be stopped due to the time limit ({left} left; at {dt.datetime.now()})")
             break
         print(f"[DEBUG] {dt.timedelta(seconds=elapsed_time)} left.")
-        time.sleep(60)
+        time.sleep(600)
 
     print(f"* Move {run_data_file} to {base_data_path}")
     shutil.move(str(run_data_file), str(base_data_path/run_data_file.name))
     run_data_dir.rmdir()
     run_dir.rmdir()
+    print("All processes have finished.")
 
 
 def get_salvage_data_path():

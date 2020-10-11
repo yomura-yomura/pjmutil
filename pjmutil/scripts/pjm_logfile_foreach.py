@@ -14,7 +14,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='')
     parser.add_argument("pjm_jobid", choices=all_id + all_names)
-    parser.add_argument("command", nargs="+")
+    parser.add_argument("command", type=str)
     args = parser.parse_args()
 
     colorama.init(autoreset=True)
@@ -32,7 +32,7 @@ def main():
         return 1
     for log_file in log_files:
         print(colorama.Fore.CYAN + "* {}:".format(log_file.relative_to(pjmutil.config.base_log_path)))
-        subprocess.run([*args.command, str(log_file)])
+        subprocess.run([args.command.split(), str(log_file)])
         print("")
     return 0
 
