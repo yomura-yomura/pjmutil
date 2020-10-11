@@ -8,11 +8,13 @@ import colorama
 
 
 def main():
-    all_id = pjmutil.util.get_all_job_id()
-    all_names = pjmutil.util.get_all_job_names()
-    parser = argparse.ArgumentParser(description='tail log of process')
+    # all_id = pjmutil.util.get_all_job_id()
+    # all_names = pjmutil.util.get_all_job_names()
+    all_names, all_id = zip(*pjmutil.util.get_stored_all_job_names_id().items())
+
+    parser = argparse.ArgumentParser(description='')
     parser.add_argument("pjm_jobid", choices=all_id + all_names)
-    parser.add_argument("-n", "--lines", type=int, default=10)
+    parser.add_argument("command", nargs="+")
     args = parser.parse_args()
 
     colorama.init(autoreset=True)
@@ -30,7 +32,7 @@ def main():
         return 1
     for log_file in log_files:
         print(colorama.Fore.CYAN + "* {}:".format(log_file.relative_to(pjmutil.config.base_log_path)))
-        subprocess.run(["tail", "-n", str(args.lines), str(log_file)])
+        subprocess.run([*args.command, str(log_file)])
         print("")
     return 0
 

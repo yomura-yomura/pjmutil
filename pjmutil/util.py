@@ -9,11 +9,15 @@ import time
 from .config import *
 
 
-def batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
-              seeds=None):
+def get_run_dir(pjm_jobid):
+    return pathlib.Path(f"/tmp/job{pjm_jobid}/")
+
+
+def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
+                  seeds=None):
     log_path = base_log_path / process_name
     all_inputs_path = pathlib.Path(all_inputs_process)
-    run_dir = pathlib.Path(f"/tmp/job{pjm_jobid}/")
+    run_dir = get_run_dir()
     run_data_dir = run_dir / "data/"
 
     if not all_inputs_path.is_file():
@@ -74,6 +78,31 @@ def batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
     run_dir.rmdir()
 
 
+def get_salvage_data_path():
+    return base_data_path / "salvaged"
+
+
+def salvage_data():
+    job_dict = get_stored_all_job_names_id()
+
+    salvaged_data_dir = get_salvage_data_path()
+
+    for name, jobid in job_dict.items():
+        print(f"* Checking {name}: ", end="")
+        run_dir = get_run_dir(jobid)
+        if not run_dir.exists():
+            print("Not Found")
+            continue
+        else:
+            print("Found")
+
+        target_dir = salvaged_data_dir / name
+
+        print(f"\t** Move {run_dir} to {target_dir}")
+        shutil.move(str(run_dir), str(target_dir))
+    print("All processes have been done.")
+
+
 def get_elapsed_time(pjm_jobid):
     stdout = subprocess.run(["pjstat", "-s", "--choose", "elp", str(pjm_jobid)], capture_output=True).stdout.decode()
     lines = stdout.splitlines()
@@ -100,6 +129,14 @@ def get_all_job_id():
 def get_all_job_names():
     stdout = subprocess.run(["pjstat", "--choose", "jnam", "-s"], capture_output=True).stdout.decode()
     return [m[1] for m in re.finditer(r"^ JOB NAME .* : (.*)$", stdout, re.MULTILINE)]
+
+
+def get_stored_all_job_names_id():
+    return {
+        p.name: int(splited[1]) if len(splited := pjm_file.open().readline().split("'")) == 3 else None
+        for p in base_log_path.glob("*")
+        if p.is_dir() and (pjm_file := p/"pjm.out").exists()
+    }
 
 
 def kill_batch_job(id=None, name=None):

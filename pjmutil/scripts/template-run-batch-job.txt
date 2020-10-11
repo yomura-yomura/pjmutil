@@ -12,7 +12,7 @@
 source {bash_profile_path}
 
 python -u -c "
-from pjmutil.util import batch_job
-batch_job('$PJM_JOBID', '{all_inputs_path}', '{process_name}', '{resource_group}',
-          seeds={seeds})
+from pjmutil.util import run_batch_job
+run_batch_job('$PJM_JOBID', '{all_inputs_path}', '{process_name}', '{resource_group}',
+              seeds={seeds})
 "

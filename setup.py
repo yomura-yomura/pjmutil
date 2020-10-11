@@ -33,10 +33,11 @@ setup(
     entry_points={
         'console_scripts': [
             "pjm-run = pjmutil.scripts.run_batch_job:main",
-            "pjm-logfile-foreach = pjmutil.scripts.tail_log_of_batch_job:main"
+            "pjm-logfile-foreach = pjmutil.scripts.tail_log_of_batch_job:main",
+            "pjm-salvage = pjmutil.scripts.pjm_salvage:main"
         ],
     },
-    package_data={"pjmutil": ["scripts/template-batch-job.txt"]},
+    package_data={"pjmutil": ["scripts/template-run-batch-job.txt", "scripts/template-salvage-data.txt"]},
     include_package_data=True,
     install_requires=[
         "pycrskrun @ git+https://github.com/yomura-yomura/pycrskrun",

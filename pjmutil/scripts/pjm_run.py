@@ -7,7 +7,7 @@ import pathlib
 from pjmutil.config import base_log_path, get_data_file_path, resource_groups, bash_profile_path
 import shutil
 
-template_batch_job_script = open(pathlib.Path(__file__).parent/"template-batch-job.txt").read()
+template_run_batch_job_script = open(pathlib.Path(__file__).parent / "template-run-batch-job.txt").read()
 
 
 def main():
@@ -52,7 +52,7 @@ def run_batch_job(all_inputs_path, resource_group, output=None, force=False, see
         if isinstance(seeds, np.ndarray):
             seeds = seeds.tolist()
 
-    script = template_batch_job_script.format(
+    script = template_run_batch_job_script.format(
         resource_group=resource_group,
         log_path=log_path,
         bash_profile_path=bash_profile_path,
