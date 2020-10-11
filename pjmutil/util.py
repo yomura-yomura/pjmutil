@@ -17,7 +17,7 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
                   seeds=None):
     log_path = base_log_path / process_name
     all_inputs_path = pathlib.Path(all_inputs_process)
-    run_dir = get_run_dir()
+    run_dir = get_run_dir(pjm_jobid)
     run_data_dir = run_dir / "data/"
 
     if not all_inputs_path.is_file():
