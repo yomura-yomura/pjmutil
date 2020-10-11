@@ -103,6 +103,8 @@ def salvage_data():
 
         print(f"\t** Copy {run_dir} to {target_dir}")
         shutil.copytree(str(run_dir), str(target_dir))
+
+    print(list(pathlib.Path("/tmp").glob("*")))
     print("All processes have been done.")
 
 
