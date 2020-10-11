@@ -31,7 +31,7 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
     run_data_dir.mkdir(parents=True)
     run_data_file = (run_data_dir / process_name).with_suffix(".dat")
 
-    print(f"* Start {pjm_jobid=}")
+    print(f"* Start {pjm_jobid=}, {resource_group=}")
 
     ai = pycrskrun.all_input.all_input(all_inputs_path)
     ai.change_args("TELFIL", run_data_file)
