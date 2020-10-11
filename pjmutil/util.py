@@ -7,6 +7,7 @@ import datetime as dt
 import threading
 import time
 from .config import *
+import warnings
 
 
 def get_run_dir(pjm_jobid):
@@ -14,22 +15,31 @@ def get_run_dir(pjm_jobid):
 
 
 def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
-                  seeds=None):
+                  seeds=None, use_tmp_dir_on_node=False):
     log_path = base_log_path / process_name
     all_inputs_path = pathlib.Path(all_inputs_process)
-    run_dir = get_run_dir(pjm_jobid)
-    run_data_dir = run_dir / "data/"
 
     if not all_inputs_path.is_file():
         print("process_name list: {}".format([p.name for p in base_all_inputs_path.glob("*") if p.is_file()]),
               file=sys.stderr)
         raise FileNotFoundError(all_inputs_path)
-    elif run_dir.exists():
-        raise FileExistsError(run_dir)
+
+    if use_tmp_dir_on_node:
+        warnings.warn("if huge data will be saved, all data may not be copied completely")
+        run_dir = get_run_dir(pjm_jobid)
+        run_data_dir = run_dir / "data/"
+
+        if run_dir.exists():
+            raise FileExistsError(run_dir)
+
+        run_data_dir.mkdir(parents=True)
+        run_data_file = (run_data_dir / process_name).with_suffix(".dat")
+    else:
+        run_data_file = (base_data_path / process_name).with_suffix(".dat")
+        if run_data_file.exists():
+            raise FileExistsError(run_data_file)
 
     log_path.mkdir(exist_ok=True)
-    run_data_dir.mkdir(parents=True)
-    run_data_file = (run_data_dir / process_name).with_suffix(".dat")
 
     print(f"* Start {pjm_jobid=}, {resource_group=}")
 
@@ -54,13 +64,14 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
     thread.start()
 
     print("* Start CORSIKA")
-    # 3 minutes before
-    # limit = get_limit_elapsed_time(pjm_jobid) - 3 * 60
-    limit = time_limits[resource_group] - 10 * 60
+    if use_tmp_dir_on_node:
+        limit = time_limits[resource_group] - 10 * 60
+    else:
+        limit = get_limit_elapsed_time(pjm_jobid) - 1 * 60
+
     t0 = time.time()
 
     while True:
-        # elapsed_time = get_elapsed_time(pjm_jobid)
         elapsed_time = time.time() - t0
         if not thread.is_alive():
             print("* Process has finished")
@@ -72,10 +83,11 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
         print(f"[DEBUG] {dt.timedelta(seconds=elapsed_time)} left.")
         time.sleep(60)
 
-    print(f"* Move {run_data_file} to {base_data_path}")
-    shutil.move(str(run_data_file), str(base_data_path/run_data_file.name))
-    run_data_dir.rmdir()
-    run_dir.rmdir()
+    if use_tmp_dir_on_node:
+        print(f"* Move {run_data_file} to {base_data_path}")
+        shutil.move(str(run_data_file), str(base_data_path/run_data_file.name))
+        run_data_dir.rmdir()
+        run_dir.rmdir()
     print("All processes have finished.")
 
 
