@@ -23,13 +23,14 @@ def main():
     tmp_log_dir = pathlib.Path("/tmp/pjmutil")
     tmp_log_dir.mkdir()
 
-    template_salvage_data.format(
+    script = template_salvage_data.format(
         resource_group="A",
         bash_profile_path=pjmutil.config.bash_profile_path,
         log_path=tmp_log_dir
     )
 
-    p = subprocess.run(["pjsub", "--name", "salvage_data"])
+    p = subprocess.Popen(["pjsub", "--name", "salvage_data"], stdin=subprocess.PIPE)
+    p.communicate(input=script.encode())
     if p.returncode != 0:
         raise RuntimeError(f"{p.returncode = }")
 
