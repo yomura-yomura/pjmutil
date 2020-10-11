@@ -25,6 +25,7 @@ def main():
 
     template_salvage_data.format(
         resource_group="A",
+        bash_profile_path=pjmutil.config.bash_profile_path,
         log_path=tmp_log_dir
     )
 
