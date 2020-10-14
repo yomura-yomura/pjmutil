@@ -55,7 +55,7 @@ def run_batch_job(all_inputs_path, resource_group, output=None, force=False, see
 
     script = template_run_batch_job_script.format(
         resource_group=resource_group,
-        time_limit=pjmutil.config.time_limits[resource_group],
+        time_limit=int(pjmutil.config.time_limits[resource_group].total_seconds()),
         log_path=log_path,
         bash_profile_path=pjmutil.config.bash_profile_path,
         all_inputs_path=all_inputs_path,
