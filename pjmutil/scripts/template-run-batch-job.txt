@@ -5,6 +5,7 @@
 #PJM -L "rscgrp={resource_group}"
 #PJM -L "vnode=1"
 #PJM -L "vnode-core=1"
+#PJM -L "elapse={time_limit}"
 #PJM -o {log_path}/pjm.out
 #PJM -e {log_path}/pjm.err
 #----- pjsub options -----#

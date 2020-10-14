@@ -8,8 +8,6 @@ import colorama
 
 
 def main():
-    # all_id = pjmutil.util.get_all_job_id()
-    # all_names = pjmutil.util.get_all_job_names()
     all_names, all_id = zip(*pjmutil.util.get_stored_all_job_names_id().items())
 
     parser = argparse.ArgumentParser(description='')

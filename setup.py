@@ -14,7 +14,7 @@ if not config_path.exists():
         all_inputs_dir=str(default_result_dir / "all-inputs/"),
         bash_profile_file=pathlib.Path.home() / ".bash_profile",
         resource_groups=None,
-        time_limits=None,
+        time_limits=None,  # seconds
         crsk_path=None,
         runner=None,
     )
@@ -24,7 +24,7 @@ if not config_path.exists():
 
 setup(
     name='pjmutil',
-    version='1.5.2',
+    version='1.6',
     description='',
     author='yomura',
     author_email='yomura@hoge.jp',
@@ -40,7 +40,8 @@ setup(
     package_data={"pjmutil": ["scripts/template-run-batch-job.txt", "scripts/template-salvage-data.txt"]},
     include_package_data=True,
     install_requires=[
-        "pycrskrun @ git+https://github.com/yomura-yomura/pycrskrun",
-        "colorama"
+        "numpy",
+        "colorama",
+        "pycrskrun @ git+https://github.com/yomura-yomura/pycrskrun"
     ]
 )

@@ -4,14 +4,14 @@ import sys
 import numpy as np
 import subprocess
 import pathlib
-from pjmutil.config import base_log_path, get_data_file_path, resource_groups, bash_profile_path
+import pjmutil
 import shutil
 
 template_run_batch_job_script = open(pathlib.Path(__file__).parent / "template-run-batch-job.txt").read()
 
 
 def main():
-    rg_dict = {rg.lower(): rg for rg in resource_groups}
+    rg_dict = {rg.lower(): rg for rg in pjmutil.config.resource_groups}
 
     parser = argparse.ArgumentParser(description='run process')
     parser.add_argument("all_inputs_path", type=pathlib.Path)
@@ -32,8 +32,8 @@ def run_batch_job(all_inputs_path, resource_group, output=None, force=False, see
     else:
         process_name = output
 
-    log_path = base_log_path / process_name
-    data_path = get_data_file_path(process_name)
+    log_path = pjmutil.config.base_log_path / process_name
+    data_path = pjmutil.config.get_data_file_path(process_name)
 
     if force:
         if log_path.exists():
@@ -55,8 +55,9 @@ def run_batch_job(all_inputs_path, resource_group, output=None, force=False, see
 
     script = template_run_batch_job_script.format(
         resource_group=resource_group,
+        time_limit=pjmutil.config.time_limits[resource_group],
         log_path=log_path,
-        bash_profile_path=bash_profile_path,
+        bash_profile_path=pjmutil.config.bash_profile_path,
         all_inputs_path=all_inputs_path,
         process_name=process_name,
         seeds=seeds

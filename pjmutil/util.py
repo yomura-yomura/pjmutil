@@ -3,7 +3,6 @@ import pycrskrun.all_input
 import subprocess
 import re
 import shutil
-import datetime as dt
 import threading
 import time
 from .config import *
@@ -65,9 +64,9 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
 
     print("* Start CORSIKA")
     if use_tmp_dir_on_node:
-        limit = time_limits[resource_group] - 10 * 60
+        limit = time_limits[resource_group].total_seconds() - 10 * 60
     else:
-        limit = time_limits[resource_group] - 1 * 60
+        limit = time_limits[resource_group].total_seconds() - 1 * 60
 
     t0 = time.time()
 

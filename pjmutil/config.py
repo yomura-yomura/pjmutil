@@ -1,5 +1,6 @@
 import pathlib
 import json
+import datetime as dt
 
 config_file = pathlib.Path.home() / ".pjmutil" / "config"
 with config_file.open("r") as f:
@@ -8,14 +9,14 @@ with config_file.open("r") as f:
 if config["resource_groups"] is None:
     raise ValueError(f"Available 'resource_groups' must be specified. Edit {config_file}.")
 if config["time_limits"] is None:
-    raise ValueError(f"Available 'resource_groups' must be specified. Edit {config_file}.")
+    raise ValueError(f"Available 'time_limits' must be specified. Edit {config_file}.")
 elif config["crsk_path"] is None:
     raise ValueError(f"Available 'crsk_path' must be specified. Edit {config_file}.")
 elif config["runner"] is None:
     raise ValueError(f"Available 'runner' must be specified. Edit {config_file}.")
 
 resource_groups = config["resource_groups"]
-time_limits = {k: v for k, v in zip(config["resource_groups"], config["time_limits"])}
+time_limits = {k: dt.timedelta(seconds=v) for k, v in zip(config["resource_groups"], config["time_limits"])}
 base_log_path = pathlib.Path(config["log_dir"])
 base_data_path = pathlib.Path(config["data_dir"])
 base_all_inputs_path = pathlib.Path(config["all_inputs_dir"])
