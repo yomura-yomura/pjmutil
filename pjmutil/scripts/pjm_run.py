@@ -26,7 +26,7 @@ def main():
     return run_batch_job(all_inputs_path, rg_dict[args.resource_group], output=args.output, force=args.force)
 
 
-def run_batch_job(all_inputs_path, resource_group, output=None, force=False, seeds=None):
+def run_batch_job(all_inputs_path, resource_group, output=None, force=False, seeds=None, memory_limit=4):
     if output is None:
         process_name = all_inputs_path.name
     else:
@@ -55,6 +55,7 @@ def run_batch_job(all_inputs_path, resource_group, output=None, force=False, see
 
     script = template_run_batch_job_script.format(
         resource_group=resource_group,
+        memory_limit=memory_limit,
         time_limit=int(pjmutil.config.time_limits[resource_group].total_seconds()),
         log_path=log_path,
         bash_profile_path=pjmutil.config.bash_profile_path,

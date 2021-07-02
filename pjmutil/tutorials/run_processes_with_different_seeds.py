@@ -23,6 +23,7 @@ def main():
     i_seeds_starts = 0
     all_inputs_file = pathlib.Path("/path/to/all-inputs")
     resource_group = "c"
+    memory_limit = 4
 
     if not all_inputs_file.exists():
         raise FileNotFoundError(all_inputs_file)
@@ -36,7 +37,8 @@ def main():
     for i in np.arange(n_processes) + i_seeds_starts:
         process_name = f"{base_process_name}_ts{i}"
         print(colorama.Fore.MAGENTA + f"* {process_name}")
-        run_batch_job(all_inputs_file, resource_group, output=process_name, seeds=make_seeds(i))
+        run_batch_job(all_inputs_file, resource_group, output=process_name, seeds=make_seeds(i),
+                      memory_limit=memory_limit)
 
     return 0
 
