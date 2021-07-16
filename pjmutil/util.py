@@ -1,4 +1,6 @@
 import sys
+
+import numpy as np
 import pycrskrun.all_input
 import subprocess
 import re
@@ -15,6 +17,8 @@ def get_run_dir(pjm_jobid):
 
 def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
                   seeds=None, use_tmp_dir_on_node=False):
+    assert use_tmp_dir_on_node == np.False_
+
     log_path = base_log_path / process_name
     all_inputs_path = pathlib.Path(all_inputs_process)
 
@@ -23,20 +27,22 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
               file=sys.stderr)
         raise FileNotFoundError(all_inputs_path)
 
-    if use_tmp_dir_on_node:
-        warnings.warn("if huge data will be saved, all data may not be copied completely")
-        run_dir = get_run_dir(pjm_jobid)
-        run_data_dir = run_dir / "data/"
-
-        if run_dir.exists():
-            raise FileExistsError(run_dir)
-
-        run_data_dir.mkdir(parents=True)
-        run_data_file = (run_data_dir / process_name).with_suffix(".dat")
-    else:
-        run_data_file = (base_data_path / process_name).with_suffix(".dat")
-        if run_data_file.exists():
-            raise FileExistsError(run_data_file)
+    # if use_tmp_dir_on_node:
+    #     warnings.warn("if huge data will be saved, all data may not be copied completely")
+    #     run_dir = get_run_dir(pjm_jobid)
+    #     run_data_dir = run_dir / "data/"
+    #
+    #     if run_dir.exists():
+    #         raise FileExistsError(run_dir)
+    #
+    #     run_data_dir.mkdir(parents=True)
+    #     run_data_file = (run_data_dir / process_name).with_suffix(".dat")
+    # else:
+    run_data_dir = base_data_path / process_name
+    run_data_dir.mkdir(parents=True, exist_ok=True)
+    run_data_file = (run_data_dir / process_name).with_suffix(".dat")
+    if run_data_file.exists():
+        raise FileExistsError(run_data_file)
 
     log_path.mkdir(exist_ok=True)
 
@@ -44,6 +50,7 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
 
     ai = pycrskrun.all_input.all_input(all_inputs_path)
     ai.change_args("TELFIL", run_data_file)
+    ai.change_args("DIRECT", f"{run_data_dir}/")
 
     if seeds is not None:
         # assert np.ndim(seeds) == 2
@@ -63,10 +70,10 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
     thread.start()
 
     print("* Start CORSIKA")
-    if use_tmp_dir_on_node:
-        limit = time_limits[resource_group].total_seconds() - 10 * 60
-    else:
-        limit = time_limits[resource_group].total_seconds() - 1 * 60
+    # if use_tmp_dir_on_node:
+    #     limit = time_limits[resource_group].total_seconds() - 10 * 60
+    # else:
+    limit = time_limits[resource_group].total_seconds() - 1 * 60
 
     t0 = time.time()
 
@@ -82,11 +89,11 @@ def run_batch_job(pjm_jobid, all_inputs_process, process_name, resource_group,
         print(f"[DEBUG] {dt.timedelta(seconds=elapsed_time)} left.")
         time.sleep(60)
 
-    if use_tmp_dir_on_node:
-        print(f"* Move {run_data_file} to {base_data_path}")
-        shutil.move(str(run_data_file), str(base_data_path/run_data_file.name))
-        run_data_dir.rmdir()
-        run_dir.rmdir()
+    # if use_tmp_dir_on_node:
+    #     print(f"* Move {run_data_file} to {base_data_path}")
+    #     shutil.move(str(run_data_file), str(base_data_path/run_data_file.name))
+    #     run_data_dir.rmdir()
+    #     run_dir.rmdir()
     print("All processes have finished.")
 
 

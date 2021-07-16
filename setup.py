@@ -24,7 +24,7 @@ if not config_path.exists():
 
 setup(
     name='pjmutil',
-    version='1.8',
+    version='2.0',
     description='',
     author='yomura',
     author_email='yomura@hoge.jp',
