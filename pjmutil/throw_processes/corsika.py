@@ -1,6 +1,9 @@
 import numpy as np
 import subprocess
 import pathlib
+
+import pycrskrun.particle_type
+
 import pjmutil
 import shutil
 
@@ -8,7 +11,8 @@ import shutil
 template_run_batch_job_script = open(pathlib.Path(__file__).parent / "template-run-batch-job.txt").read()
 
 
-def throw(all_inputs_path, resource_group, output=None, force=False, seeds=None, memory_limit=4):
+def throw(all_inputs_path, resource_group, memory_limit=4, output=None, force=False,
+          seeds=None, particle_type=None):
     if output is None:
         process_name = all_inputs_path.name
     else:
@@ -35,6 +39,11 @@ def throw(all_inputs_path, resource_group, output=None, force=False, seeds=None,
         if isinstance(seeds, np.ndarray):
             seeds = seeds.tolist()
 
+    if particle_type is not None:
+        particle_id = pycrskrun.particle_type.type_to_id(particle_type)
+    else:
+        particle_id = None
+
     script = template_run_batch_job_script.format(
         resource_group=resource_group,
         memory_limit=memory_limit,
@@ -43,7 +52,7 @@ def throw(all_inputs_path, resource_group, output=None, force=False, seeds=None,
         bash_profile_path=pjmutil.config.bash_profile_path,
         python_code=f"""
 from pjmutil.batch_job_processes.corsika import run
-run("$PJM_JOBID", "{all_inputs_path}", "{process_name}", "{resource_group}", seeds={seeds})
+run("$PJM_JOBID", "{all_inputs_path}", "{process_name}", "{resource_group}", {seeds}, {particle_id})
 """
     )
 

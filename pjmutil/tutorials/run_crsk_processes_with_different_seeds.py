@@ -24,6 +24,8 @@ def main():
     all_inputs_file = pathlib.Path("/path/to/all-inputs")
     resource_group = "c"
     memory_limit = 4
+    particle_type = "p"
+    # particle_type = "Fe"
 
     if not all_inputs_file.exists():
         raise FileNotFoundError(all_inputs_file)
@@ -31,6 +33,8 @@ def main():
         raise ValueError(f"'{resource_group}' not defined in {pjmutil.config.resource_groups}")
 
     base_process_name = all_inputs_file.name
+    if not base_process_name.startswith(f"{particle_type.lower()}_"):
+        base_process_name = f"{particle_type.lower()}_{base_process_name}"
 
     colorama.init(autoreset=True)
 
@@ -38,9 +42,8 @@ def main():
         process_name = f"{base_process_name}_ts{i}"
         print(colorama.Fore.MAGENTA + f"* {process_name}")
         throw(
-            all_inputs_file, resource_group,
-            output=process_name, seeds=make_seeds(i),
-            memory_limit=memory_limit
+            all_inputs_file, resource_group, memory_limit=memory_limit, output=process_name, force=False,
+            seeds=make_seeds(i), particle_type=particle_type
         )
 
     return 0

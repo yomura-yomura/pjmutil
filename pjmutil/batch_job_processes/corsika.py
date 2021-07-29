@@ -1,12 +1,13 @@
 import sys
 import pycrskrun.all_input
+import pycrskrun.particle_type
 import subprocess
 import threading
 import time
 from ..config import *
 
 
-def run(pjm_job_id, all_inputs_process, process_name, resource_group, seeds=None):
+def run(pjm_job_id, all_inputs_process, process_name, resource_group, seeds=None, particle_id=None):
 
     log_path = base_log_path / process_name
     all_inputs_path = pathlib.Path(all_inputs_process)
@@ -35,6 +36,9 @@ def run(pjm_job_id, all_inputs_process, process_name, resource_group, seeds=None
             for i, s in enumerate(seed):
                 if s is not None:
                     args[i] = s
+
+    if particle_id is not None:
+        ai.change_args("PRMPAR", particle_id)
 
     def _run():
         subprocess.Popen(
