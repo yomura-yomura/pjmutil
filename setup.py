@@ -12,7 +12,7 @@ if not config_path.exists():
         log_dir=str(default_result_dir / "log/"),
         data_dir=str(default_result_dir / "data/"),
         all_inputs_dir=str(default_result_dir / "all-inputs/"),
-        bash_profile_file=pathlib.Path.home() / ".bash_profile",
+        bash_profile_file=str(pathlib.Path.home() / ".bash_profile"),
         resource_groups=None,
         time_limits=None,  # seconds
         crsk_path=None,
@@ -24,7 +24,7 @@ if not config_path.exists():
 
 setup(
     name='pjmutil',
-    version='3.1',
+    version='3.1.1',
     description='',
     author='yomura',
     author_email='yomura@hoge.jp',

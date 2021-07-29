@@ -52,7 +52,7 @@ def throw(all_inputs_path, resource_group, memory_limit=4, output=None, force=Fa
         bash_profile_path=pjmutil.config.bash_profile_path,
         python_code=f"""
 from pjmutil.batch_job_processes.corsika import run
-run("$PJM_JOBID", "{all_inputs_path}", "{process_name}", "{resource_group}", {seeds}, {particle_id})
+run('$PJM_JOBID', '{all_inputs_path}', '{process_name}', '{resource_group}', {seeds}, {particle_id})
 """
     )
 
