@@ -11,17 +11,17 @@ def main():
     all_names, all_id = zip(*pjmutil.util.get_stored_all_job_names_id().items())
 
     parser = argparse.ArgumentParser(description='')
-    parser.add_argument("pjm_jobid", choices=all_id + all_names)
+    parser.add_argument("pjm_job_id", choices=all_id + all_names)
     parser.add_argument("command", type=str)
     args = parser.parse_args()
 
     colorama.init(autoreset=True)
 
     try:
-        i = all_id.index(args.pjm_jobid)
+        i = all_id.index(args.pjm_job_id)
         name = all_names[i]
     except ValueError:
-        name = args.pjm_jobid
+        name = args.pjm_job_id
 
     log_dir = pjmutil.config.base_log_path / name
     log_files = sorted(log_dir.glob("*"), reverse=True)
