@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import pathlib
 import pjmutil
-from pjmutil.scripts.pjm_run import run_batch_job
+from pjmutil.throw_processes.corsika import throw
 import colorama
 
 
@@ -37,12 +37,14 @@ def main():
     for i in np.arange(n_processes) + i_seeds_starts:
         process_name = f"{base_process_name}_ts{i}"
         print(colorama.Fore.MAGENTA + f"* {process_name}")
-        run_batch_job(all_inputs_file, resource_group, output=process_name, seeds=make_seeds(i),
-                      memory_limit=memory_limit)
+        throw(
+            all_inputs_file, resource_group,
+            output=process_name, seeds=make_seeds(i),
+            memory_limit=memory_limit
+        )
 
     return 0
 
 
 if __name__ == "__main__":
     sys.exit(main())
-

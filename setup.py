@@ -7,7 +7,7 @@ config_dir.mkdir(exist_ok=True)
 config_path = config_dir / "config"
 
 if not config_path.exists():
-    default_result_dir = pathlib.Path.home() / "pjutil"
+    default_result_dir = pathlib.Path.home() / "pjmutil"
     config = dict(
         log_dir=str(default_result_dir / "log/"),
         data_dir=str(default_result_dir / "data/"),
@@ -24,7 +24,7 @@ if not config_path.exists():
 
 setup(
     name='pjmutil',
-    version='2.0',
+    version='3.0',
     description='',
     author='yomura',
     author_email='yomura@hoge.jp',
@@ -32,12 +32,10 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            "pjm-run = pjmutil.scripts.pjm_run:main",
             "pjm-logfile-foreach = pjmutil.scripts.pjm_logfile_foreach:main",
-            "pjm-salvage = pjmutil.scripts.pjm_salvage:main"
         ],
     },
-    package_data={"pjmutil": ["scripts/template-run-batch-job.txt", "scripts/template-salvage-data.txt"]},
+    package_data={"pjmutil": ["throw_processes/template-run-batch-job.txt"]},
     include_package_data=True,
     install_requires=[
         "numpy",

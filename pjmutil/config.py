@@ -2,6 +2,7 @@ import pathlib
 import json
 import datetime as dt
 
+
 config_file = pathlib.Path.home() / ".pjmutil" / "config"
 with config_file.open("r") as f:
     config = json.load(f)
@@ -12,8 +13,8 @@ if config["time_limits"] is None:
     raise ValueError(f"Available 'time_limits' must be specified. Edit {config_file}.")
 elif config["crsk_path"] is None:
     raise ValueError(f"Available 'crsk_path' must be specified. Edit {config_file}.")
-elif config["runner"] is None:
-    raise ValueError(f"Available 'runner' must be specified. Edit {config_file}.")
+elif config["crsk_runner_name"] is None:
+    raise ValueError(f"Available 'crsk_runner_name' must be specified. Edit {config_file}.")
 
 resource_groups = config["resource_groups"]
 time_limits = {k: dt.timedelta(seconds=v) for k, v in zip(config["resource_groups"], config["time_limits"])}
@@ -23,7 +24,7 @@ base_all_inputs_path = pathlib.Path(config["all_inputs_dir"])
 bash_profile_path = pathlib.Path(config["bash_profile_file"])
 
 corsika_path = pathlib.Path(config["crsk_path"])
-simulator = config["runner"]
+simulator = config["crsk_runner_name"]
 
 if not base_log_path.exists():
     base_log_path.mkdir(parents=True)
