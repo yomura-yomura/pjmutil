@@ -24,7 +24,7 @@ def main(dry_run: bool):
 
     split_args_list = list(map(np.ndarray.tolist, np.array_split(all_args_list, n_processes)))
 
-    max_n_digits = int(np.log10(n_processes))
+    max_n_digits = int(np.log10(n_processes)) + 1
     for i, args_list in enumerate(split_args_list):
         log_path = log_root_path/f"{i:>0{max_n_digits}}"
 
