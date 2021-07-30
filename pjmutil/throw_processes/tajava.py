@@ -10,6 +10,7 @@ template_run_batch_job_script = open(pathlib.Path(__file__).parent / "template-r
 
 
 def throw(args_list, resource_group, memory_limit, log_path):
+    log_path.mkdir(parents=True)
     script = template_run_batch_job_script.format(
         resource_group=resource_group,
         memory_limit=memory_limit,
@@ -27,7 +28,7 @@ for args in args_list:
 """
     )
 
-    process_name = "-".join(("tajava", *log_path.parts[-2:]))
+    process_name = "_".join(("tajava", *log_path.parts[-2:]))
     p = subprocess.Popen(["pjsub", "--name", process_name], stdin=subprocess.PIPE)
     p.communicate(input=script.encode())
     return p.returncode
