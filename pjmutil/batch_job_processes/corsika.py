@@ -1,23 +1,24 @@
-import sys
+import pjmutil.config
 import pycrskrun.all_input
 import pycrskrun.particle_type
 import subprocess
 import threading
 import time
+import pathlib
+import datetime as dt
 from ..config import *
 
 
 def run(pjm_job_id, all_inputs_process, process_name, resource_group, seeds=None, particle_id=None):
+    crsk_config = pjmutil.config.get_crsk_config()
 
-    log_path = base_log_path / process_name
+    log_path = crsk_config["log_path"] / process_name
     all_inputs_path = pathlib.Path(all_inputs_process)
 
     if not all_inputs_path.is_file():
-        print("process_name list: {}".format([p.name for p in base_all_inputs_path.glob("*") if p.is_file()]),
-              file=sys.stderr)
         raise FileNotFoundError(all_inputs_path)
 
-    run_data_dir = base_data_path / process_name
+    run_data_dir = crsk_config["data_path"] / process_name
     run_data_dir.mkdir(parents=True, exist_ok=True)
     run_data_file = (run_data_dir / process_name).with_suffix(".dat")
     if run_data_file.exists():
@@ -42,7 +43,7 @@ def run(pjm_job_id, all_inputs_process, process_name, resource_group, seeds=None
 
     def _run():
         subprocess.Popen(
-            [f"./{simulator}"], cwd=corsika_path, stdin=subprocess.PIPE,
+            [f"./{crsk_config['runner']}"], cwd=crsk_config["path"], stdin=subprocess.PIPE,
             stdout=(log_path / "mc.out").open("w"), stderr=(log_path / "mc.err").open("w")
         ).communicate(str(ai).encode())
 

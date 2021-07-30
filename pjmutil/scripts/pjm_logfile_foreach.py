@@ -23,13 +23,15 @@ def main():
     except ValueError:
         name = args.pjm_job_id
 
-    log_dir = pjmutil.config.base_log_path / name
+    crsk_config = pjmutil.config.get_crsk_config()
+
+    log_dir = crsk_config["log_path"] / name
     log_files = sorted(log_dir.glob("*"), reverse=True)
     if len(log_files) == 0:
         print(colorama.Fore.RED + f"No log files under {log_dir}")
         return 1
     for log_file in log_files:
-        print(colorama.Fore.CYAN + "* {}:".format(log_file.relative_to(pjmutil.config.base_log_path)))
+        print(colorama.Fore.CYAN + "* {}:".format(log_file.relative_to(crsk_config["log_path"])))
         subprocess.run([*args.command.split(), str(log_file)])
         print("")
     return 0

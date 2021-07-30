@@ -1,9 +1,7 @@
 import numpy as np
 import subprocess
 import pathlib
-
 import pycrskrun.particle_type
-
 import pjmutil
 import shutil
 
@@ -18,8 +16,10 @@ def throw(all_inputs_path, resource_group, memory_limit=4, output=None, force=Fa
     else:
         process_name = output
 
-    log_path = pjmutil.config.base_log_path / process_name
-    data_path = pjmutil.config.get_data_file_path(process_name)
+    crsk_config = pjmutil.config.get_crsk_config()
+
+    log_path = crsk_config["log_path"] / process_name
+    data_path = (crsk_config["data_path"] / process_name).with_suffix(".dat")
 
     if force:
         if log_path.exists():

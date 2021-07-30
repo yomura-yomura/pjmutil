@@ -2,6 +2,7 @@ from setuptools import find_packages, setup
 import pathlib
 import json
 
+
 config_dir = pathlib.Path.home() / ".pjmutil"
 config_dir.mkdir(exist_ok=True)
 config_path = config_dir / "config"
@@ -9,22 +10,24 @@ config_path = config_dir / "config"
 if not config_path.exists():
     default_result_dir = pathlib.Path.home() / "pjmutil"
     config = dict(
-        log_dir=str(default_result_dir / "log/"),
-        data_dir=str(default_result_dir / "data/"),
-        all_inputs_dir=str(default_result_dir / "all-inputs/"),
-        bash_profile_file=str(pathlib.Path.home() / ".bash_profile"),
         resource_groups=None,
         time_limits=None,  # seconds
+        bash_profile_file=str(pathlib.Path.home() / ".bash_profile"),
+
         crsk_path=None,
-        runner=None,
+        crsk_output_path=default_result_dir/"corsika",
+        crsk_runner_name=None,
+
+        tjv_log_path=default_result_dir/"tajava"/"log"
     )
 
     with config_path.open("w") as f:
         json.dump(config, f, indent=4)
 
+
 setup(
     name='pjmutil',
-    version='3.1.1',
+    version='4.0',
     description='',
     author='yomura',
     author_email='yomura@hoge.jp',

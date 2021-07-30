@@ -34,7 +34,7 @@ def get_all_job_names():
 def get_stored_all_job_names_id():
     return {
         pjm_file.parent.name: int(splited[1]) if len(splited := pjm_file.open().readline().split("'")) == 3 else None
-        for pjm_file in (p/"pjm.out" for p in base_log_path.glob("*"))
+        for pjm_file in (p /"pjm.out" for p in crsk_log_path.glob("*"))
         if pjm_file.exists()
     }
 
