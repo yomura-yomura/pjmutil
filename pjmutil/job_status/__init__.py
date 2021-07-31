@@ -42,10 +42,14 @@ available_pjstat_items = {
 
 
 def to_ma_array(data, missing_value):
-    dtype = [
-        (field, f"{type_}{max(map(len, col))}" if type_ in ("U", "S") else type_)
-        for col, (field, type_) in zip(zip(*data), data_types.items())
-    ]
+    if len(data) == 0:
+        dtype = [
+            (field, f"{type_}{max(map(len, col))}" if type_ in ("U", "S") else type_)
+            for col, (field, type_) in zip(zip(*data), data_types.items())
+        ]
+    else:
+        dtype = np.dtype(list(data_types.items()))
+
     a = np.ma.empty(len(data), dtype=dtype)
     for col, name in zip(zip(*data), a.dtype.names):
         a[name].mask = [e == missing_value for e in col]
