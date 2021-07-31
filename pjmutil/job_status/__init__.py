@@ -42,7 +42,7 @@ available_pjstat_items = {
 
 
 def to_ma_array(data, missing_value):
-    if len(data) == 0:
+    if len(data) > 0:
         dtype = [
             (field, f"{type_}{max(map(len, col))}" if type_ in ("U", "S") else type_)
             for col, (field, type_) in zip(zip(*data), data_types.items())
