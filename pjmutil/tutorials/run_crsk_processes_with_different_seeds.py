@@ -40,7 +40,7 @@ def main():
 
     for i in np.arange(n_processes) + i_seeds_starts:
         process_name = f"{base_process_name}_ts{i}"
-        print(colorama.Fore.MAGENTA + f"* {process_name}")
+        print(colorama.Fore.MAGENTA + f"* {process_name}" + colorama.Fore.RESET)
         throw(
             all_inputs_file, resource_group, memory_limit=memory_limit, output=process_name, force=False,
             seeds=make_seeds(i), particle_type=particle_type
