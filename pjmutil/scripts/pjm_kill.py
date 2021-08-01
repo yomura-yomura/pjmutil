@@ -9,10 +9,10 @@ def main():
     parser.add_argument("pattern", help="", default="*", type=str, nargs="?")
     parser.add_argument("-d", "--dry-run", action="store_true", default=False)
     args = parser.parse_args()
-    data = pjmutil.job_status.get_job_info(args.pattern[0])
+    data = pjmutil.job_status.get_job_info(args.pattern)
 
     if data.size == 0:
-        raise ValueError(f"No process names matched")
+        raise ValueError(f"No process names matched with {args.pattern[0]}")
 
     print(
         "\n".join([
