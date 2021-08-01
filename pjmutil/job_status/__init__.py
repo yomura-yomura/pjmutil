@@ -4,6 +4,7 @@ import numpy as np
 
 
 patterns = [
+    (" JOB ID", r"(\d+)"),
     (" JOB NAME", "(.+)"),
     (" STATE", "(.+)"),
     (" ELAPSE TIME (LIMIT)", r".+ \((\d+)\)"),
@@ -13,6 +14,7 @@ patterns = [
 ]
 
 data_types = {
+    "job_id": "i8",
     "job_name":   f"U",
     "state":      f"U",
     "limit_time": "m8[s]",
@@ -32,6 +34,7 @@ proc = re.compile(
 )
 
 available_pjstat_items = {
+    "job_id": "jid",
     "job_name":   "jnam",
     "state":      "st",
     "limit_time": "elpl",

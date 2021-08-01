@@ -27,7 +27,7 @@ if not config_path.exists():
 
 setup(
     name='pjmutil',
-    version='4.2.2',
+    version='4.3',
     description='',
     author='yomura',
     author_email='yomura@hoge.jp',
@@ -36,6 +36,7 @@ setup(
     entry_points={
         'console_scripts': [
             "pjm-logfile-foreach = pjmutil.scripts.pjm_logfile_foreach:main",
+            "pjm-kill = pjmutil.scripts.pjm_kill:main"
         ],
     },
     package_data={"pjmutil": ["throw_processes/template-run-batch-job.txt"]},
