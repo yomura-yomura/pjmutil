@@ -6,10 +6,10 @@ import subprocess
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("pattern", help="", default="*", type=str)
+    parser.add_argument("pattern", help="", default="*", type=str, nargs="?")
     parser.add_argument("-d", "--dry-run", action="store_true", default=False)
     args = parser.parse_args()
-    data = pjmutil.job_status.get_job_info(args[0])
+    data = pjmutil.job_status.get_job_info(args.pattern[0])
 
     if args.dry_run:
         return 0
