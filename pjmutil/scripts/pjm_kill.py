@@ -25,7 +25,7 @@ def main():
 
     yn = input("Are you sure that all running processes shown above will be killed? [y/n] ")
     if yn == "y":
-        subprocess.run(["pjdel", " ".join(data["job_id"])])
+        subprocess.run(["pjdel", " ".join(map(str, data["job_id"]))])
         print("Processes shown above have been killed.")
     else:
         return 1
