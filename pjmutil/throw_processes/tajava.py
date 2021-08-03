@@ -18,13 +18,13 @@ def throw(args_list, resource_group, memory_limit, log_path):
         log_path=log_path,
         bash_profile_path=pjmutil.config.bash_profile_path,
         python_code=f"""
-import hybrid_analysis.sim.run.reconstruct
+import hybrid_analysis.java.high_level
 from pathlib import PosixPath
 
 args_list = {args_list}
 
 for args in args_list:
-    hybrid_analysis.sim.run.reconstruct.reconstruct(*args)
+    hybrid_analysis.java.high_level.reconstruct_hybrid_events(*args)
 """
     )
 

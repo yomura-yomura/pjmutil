@@ -12,7 +12,7 @@ def main():
     data = pjmutil.job_status.get_job_info(args.pattern)
 
     if data.size == 0:
-        raise ValueError(f"No process names matched with {args.pattern[0]}")
+        raise ValueError(f"No process names matched with {args.pattern}")
 
     print(
         "\n".join([
