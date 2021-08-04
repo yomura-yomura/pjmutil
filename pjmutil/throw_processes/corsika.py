@@ -3,6 +3,7 @@ import subprocess
 import pathlib
 import pycrskrun.particle_type
 import pjmutil
+import pjmutil.throw_processes.template_run_batch_job
 import shutil
 
 
@@ -44,7 +45,7 @@ def throw(all_inputs_path, resource_group, memory_limit=4, output=None, force=Fa
     else:
         particle_id = None
 
-    script = template_run_batch_job_script.format(
+    script = pjmutil.throw_processes.template_run_batch_job.load(
         resource_group=resource_group,
         memory_limit=memory_limit,
         time_limit=int(pjmutil.config.time_limits[resource_group].total_seconds()),

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import numpy as np
 import pathlib
-import pjmutil
-from pjmutil.throw_processes.tajava import throw
 import colorama
 import hybrid_analysis.sim.run.reconstruct
 import datetime as dt
+import subprocess
+import pjmutil
+import pjmutil.throw_processes.template_run_batch_job
 
 
 # dry_run = True
@@ -13,6 +14,31 @@ dry_run = False
 n_processes = 10
 resource_group = "b"
 memory_limit = 4
+
+
+def throw(args_list, log_path):
+    log_path.mkdir(parents=True)
+    script = pjmutil.throw_processes.template_run_batch_job.load(
+        resource_group=resource_group,
+        memory_limit=memory_limit,
+        time_limit=int(pjmutil.config.time_limits[resource_group].total_seconds()),
+        log_path=log_path,
+        bash_profile_path=pjmutil.config.bash_profile_path,
+        python_code=f"""
+import hybrid_analysis.java.high_level
+from pathlib import PosixPath
+
+args_list = {args_list}
+
+for args in args_list:
+    hybrid_analysis.java.high_level.reconstruct_hybrid_events(*args)
+"""
+    )
+
+    process_name = "_".join(("tajava", *log_path.parts[-2:]))
+    p = subprocess.Popen(["pjsub", "--name", process_name], stdin=subprocess.PIPE)
+    p.communicate(input=script.encode())
+    return p.returncode
 
 
 def main(dry_run: bool):
@@ -30,7 +56,7 @@ def main(dry_run: bool):
 
         print(colorama.Fore.MAGENTA + f"* n-jobs = {len(args_list)} > {log_path}")
         if dry_run == np.False_:
-            throw(args_list, resource_group, memory_limit, log_path)
+            throw(args_list, log_path)
 
 
 if __name__ == "__main__":
